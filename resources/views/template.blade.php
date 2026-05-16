@@ -191,13 +191,13 @@
           <ul class="sidebar-menu">
             <li class="menu-header">Main</li>
             <li class="dropdown {{ Route::is('dashboard') || Route::is('dashboard.*') ? 'active' : '' }}">
-              <a href="#" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+              <a href="{{route("dashboard")}}" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
-            <li class="dropdown {{ Route::is('kas') || Route::is('kas.*') ? 'active' : '' }}">
-              <a href="#" class="nav-link"><i data-feather="dollar-sign"></i><span>Kas</span></a>
+            <li class="dropdown {{ Route::is('pesan-tunggal') || Route::is('pesan-tunggal.*') ? 'active' : '' }}">
+              <a href="{{route("pesan-tunggal.index")}}" class="nav-link"><i data-feather="dollar-sign"></i><span>Pesan Tunggal</span></a>
             </li>
-            <li class="dropdown {{ Route::is('acara') || Route::is('acara.*') ? 'active' : '' }}">
-              <a href="#" class="nav-link"><i data-feather="calendar"></i><span>Acara</span></a>
+            <li class="dropdown {{ Route::is('bulking') || Route::is('bulking.*') ? 'active' : '' }}">
+              <a href="{{route("bulking.index")}}" class="nav-link"><i data-feather="calendar"></i><span>Pesan Bulking</span></a>
             </li>
             <li class="menu-header">Master</li>
             <li class="dropdown {{ Route::is('member') || Route::is('member.*') ? 'active' : '' }}">

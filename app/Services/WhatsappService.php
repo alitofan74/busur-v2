@@ -72,11 +72,19 @@ class WhatsappService
 
         return $this->safeResponse(
             $this->http
+                ->timeout(60) // Perpanjang timeout khusus untuk media
                 ->attach('file', $contents, $filename)
                 ->post('/send-media', [
                     'number' => $number,
                     'message' => $message ?? '',
                 ])
         );
+    }
+
+    public function checkNumber(string $number): array
+    {
+        return $this->safeResponse($this->http->get('/check-number', [
+            'number' => $number,
+        ]));
     }
 }

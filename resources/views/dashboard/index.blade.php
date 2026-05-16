@@ -49,6 +49,9 @@
                 <div id="refresh-container" style="{{ $qrData['status'] === 'Terhubung' ? 'display: none;' : '' }}">
                     <p class="text-muted">Scan QR code ini melalui WhatsApp di ponsel Anda untuk menggunakan layanan ini.</p>
                     <button id="btn-refresh-qr" class="btn btn-primary btn-lg">Segarkan QR</button>
+                    <button onclick="location.reload()" class="btn btn-outline-primary btn-lg ml-2">
+                        <i class="fas fa-sync-alt"></i> Refresh Halaman
+                    </button>
                     <hr>
                 </div>
 
