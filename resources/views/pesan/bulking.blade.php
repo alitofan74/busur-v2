@@ -192,6 +192,28 @@
     </div>
 
     <div class="col-lg-7">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible show fade">
+                <div class="alert-body">
+                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible show fade">
+                <div class="alert-body">
+                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
         <div class="card bulking-builder-card">
             <div class="card-header">
                 <div>
@@ -200,12 +222,30 @@
                 </div>
             </div>
             <div class="card-body">
-                <form id="bulkingForm" onsubmit="return false;">
+                <form id="bulkingForm" action="{{ route('bulking.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="nama_campaign">Nama Campaign</label>
+                        <input
+                            type="text"
+                            class="form-control @error('nama_campaign') is-invalid @enderror"
+                            id="nama_campaign"
+                            name="nama_campaign"
+                            value="{{ old('nama_campaign') }}"
+                            placeholder="Contoh: Promo Mei 2026"
+                        >
+                    </div>
+
                     <div class="mb-4">
                         <label class="d-block font-weight-600 mb-2">Pilih Metode Input Target</label>
                         <div class="target-method-picker">
                             <label class="target-method-option">
-                                <input type="radio" name="target_method" value="manual" checked>
+                                <input
+                                    type="radio"
+                                    name="target_method"
+                                    value="manual"
+                                    {{ old('target_method', 'manual') === 'manual' ? 'checked' : '' }}
+                                >
                                 <div class="target-method-option-body">
                                     <div class="target-method-option-title">
                                         <span>Input Manual</span>
@@ -216,7 +256,12 @@
                             </label>
 
                             <label class="target-method-option">
-                                <input type="radio" name="target_method" value="excel">
+                                <input
+                                    type="radio"
+                                    name="target_method"
+                                    value="excel"
+                                    {{ old('target_method') === 'excel' ? 'checked' : '' }}
+                                >
                                 <div class="target-method-option-body">
                                     <div class="target-method-option-title">
                                         <span>Import Excel / CSV</span>
@@ -241,7 +286,7 @@
                         <div class="card-body">
                             <div class="form-group mb-2">
                                 <label for="manual_numbers">Daftar Nomor</label>
-                                <textarea class="form-control" id="manual_numbers" name="manual_numbers" rows="6" placeholder="6281234567890;6289876543210&#10;628111222333"></textarea>
+                                <textarea class="form-control @error('manual_numbers') is-invalid @enderror" id="manual_numbers" name="manual_numbers" rows="6" placeholder="6281234567890;6289876543210&#10;628111222333">{{ old('manual_numbers') }}</textarea>
                             </div>
                             <small class="text-muted d-block mb-3">Contoh input: <code>6281234567890;6289876543210</code> atau satu nomor per baris.</small>
                         </div>
@@ -260,7 +305,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="excel_file">File Excel / CSV</label>
-                                <input type="file" class="form-control" id="excel_file" name="excel_file" accept=".xlsx,.csv" disabled>
+                                <input type="file" class="form-control @error('excel_file') is-invalid @enderror" id="excel_file" name="excel_file" accept=".xlsx,.csv" disabled>
                                 <small class="form-text text-muted">Gunakan file dengan format <code>.xlsx</code> atau <code>.csv</code>.</small>
                             </div>
                             <div class="bulking-drop-note mb-3">
@@ -305,6 +350,7 @@
                             @include('pesan.partials.chat-composer', [
                                 'textareaId' => 'bulking_pesan',
                                 'textareaName' => 'bulking_pesan',
+                                'textareaValue' => old('bulking_pesan'),
                                 'textareaLabel' => 'Isi Pesan Bulking',
                                 'textareaPlaceholder' => 'Tulis pesan broadcast di sini...',
                                 'mediaId' => 'bulking_media',
@@ -312,12 +358,52 @@
                                 'mediaHelper' => 'Preview gambar akan tampil real-time di panel kanan. Untuk file non-gambar, preview visual tidak bisa ditampilkan.',
                             ])
 
+                            <div class="card border mb-4">
+                                <div class="card-header">
+                                    <h4 class="mb-0">Pengaturan Anti-Ban</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="min_delay">Min Delay (detik)</label>
+                                                <input type="number" class="form-control @error('min_delay') is-invalid @enderror" id="min_delay" name="min_delay" min="0" value="{{ old('min_delay', 10) }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="max_delay">Max Delay (detik)</label>
+                                                <input type="number" class="form-control @error('max_delay') is-invalid @enderror" id="max_delay" name="max_delay" min="0" value="{{ old('max_delay', 30) }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="batch_size">Batch Size</label>
+                                                <input type="number" class="form-control @error('batch_size') is-invalid @enderror" id="batch_size" name="batch_size" min="1" value="{{ old('batch_size', 10) }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="rest_after_batch">Cooldown (detik)</label>
+                                                <input type="number" class="form-control @error('rest_after_batch') is-invalid @enderror" id="rest_after_batch" name="rest_after_batch" min="0" value="{{ old('rest_after_batch', 120) }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="retry_limit">Retry Limit</label>
+                                                <input type="number" class="form-control @error('retry_limit') is-invalid @enderror" id="retry_limit" name="retry_limit" min="0" value="{{ old('retry_limit', 0) }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between border-top pt-3">
                                 <div class="bulking-meta mb-3 mb-md-0">
                                     <span class="badge badge-light" id="selected-method-badge">Mode Manual</span>
                                     <span class="badge badge-light">Live Preview Aktif</span>
                                 </div>
-                                <button type="button" class="btn btn-primary btn-lg" disabled>
+                                <button type="submit" class="btn btn-primary btn-lg">
                                     <i class="fas fa-paper-plane mr-2"></i> Proses Pesan Bulking
                                 </button>
                             </div>
