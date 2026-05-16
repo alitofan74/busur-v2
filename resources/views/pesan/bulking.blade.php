@@ -260,8 +260,8 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="excel_file">File Excel / CSV</label>
-                                <input type="file" class="form-control" id="excel_file" name="excel_file" accept=".xlsx,.xls,.csv" disabled>
-                                <small class="form-text text-muted">Gunakan file dengan format <code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code>.</small>
+                                <input type="file" class="form-control" id="excel_file" name="excel_file" accept=".xlsx,.csv" disabled>
+                                <small class="form-text text-muted">Gunakan file dengan format <code>.xlsx</code> atau <code>.csv</code>.</small>
                             </div>
                             <div class="bulking-drop-note mb-3">
                                 <strong class="d-block mb-1">Format file yang disarankan</strong>
