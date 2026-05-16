@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pesan extends Model
 {
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_SENT = 'sent';
+    public const STATUS_FAILED = 'failed';
+
     protected $fillable = [
         'campaign_id',
         'nomor',
