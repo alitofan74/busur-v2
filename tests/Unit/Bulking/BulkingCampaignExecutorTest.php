@@ -43,4 +43,19 @@ class BulkingCampaignExecutorTest extends TestCase
 
         $this->assertSame('Halo Budi, kota anda Malang.', $rendered);
     }
+
+    public function test_it_renders_spintax_variations(): void
+    {
+        $renderer = app(BulkingMessageRenderer::class);
+
+        $template = '{Halo|Hai} Budi';
+        
+        $results = [];
+        for ($i = 0; $i < 10; $i++) {
+            $results[] = $renderer->render($template);
+        }
+
+        $this->assertContains('Halo Budi', $results);
+        $this->assertContains('Hai Budi', $results);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBulkingCampaignRequest;
 use App\Models\Campaign;
+use App\Services\Bulking\BulkingCampaignExecutor;
 use App\Services\Bulking\BulkingCampaignSubmissionService;
 use App\Services\Bulking\Exceptions\BulkingTargetParserException;
 use App\Services\WhatsappService;
@@ -82,6 +83,20 @@ class BulkingController extends Controller
         $campaign->load(['pesans' => fn ($query) => $query->latest('id')]);
 
         return view('pesan.bulking-show', compact('campaign'));
+    }
+
+    public function pause(Campaign $campaign, BulkingCampaignExecutor $executor)
+    {
+        $executor->pauseCampaign($campaign);
+
+        return back()->with('success', 'Campaign berhasil dijeda.');
+    }
+
+    public function resume(Campaign $campaign, BulkingCampaignExecutor $executor)
+    {
+        $executor->resumeCampaign($campaign);
+
+        return back()->with('success', 'Campaign dilanjutkan.');
     }
 
     public function checkNumber(Request $request)

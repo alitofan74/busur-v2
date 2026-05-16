@@ -27,3 +27,5 @@ Route::post('/bulking', [BulkingController::class, 'store'])->name("bulking.stor
 Route::get('/bulking/log', [BulkingController::class, 'log'])->name("bulking.log");
 Route::get('/bulking/check-number', [BulkingController::class, 'checkNumber'])->name("bulking.check");
 Route::get('/bulking/{campaign}', [BulkingController::class, 'show'])->name("bulking.show");
+Route::post('/bulking/{campaign}/pause', [BulkingController::class, 'pause'])->name("bulking.pause");
+Route::post('/bulking/{campaign}/resume', [BulkingController::class, 'resume'])->name("bulking.resume");

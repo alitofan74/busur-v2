@@ -75,10 +75,9 @@ class ProcessBulkingCampaignMessageJob implements ShouldQueue
                 'error_message' => null,
             ])->save();
 
-            $campaign->increment('terkirim');
-            $campaign->forceFill([
+            $campaign->increment('terkirim', 1, [
                 'last_processed_at' => now(),
-            ])->save();
+            ]);
         } catch (Throwable $throwable) {
             if ($this->attempts() <= (int) ($this->settings['retry_limit'] ?? 0)) {
                 $pesan->forceFill([
@@ -94,10 +93,9 @@ class ProcessBulkingCampaignMessageJob implements ShouldQueue
                 'error_message' => $throwable->getMessage(),
             ])->save();
 
-            $campaign->increment('gagal');
-            $campaign->forceFill([
+            $campaign->increment('gagal', 1, [
                 'last_processed_at' => now(),
-            ])->save();
+            ]);
         }
 
         $campaignExecutor->dispatchNextPendingMessage($campaign->fresh(), $this->settings);

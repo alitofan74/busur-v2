@@ -147,6 +147,31 @@ class BulkingCampaignExecutor
         ])->save();
     }
 
+    public function pauseCampaign(Campaign $campaign): void
+    {
+        if (in_array($campaign->status, [Campaign::STATUS_COMPLETED, Campaign::STATUS_FAILED], true)) {
+            return;
+        }
+
+        $campaign->forceFill([
+            'status' => Campaign::STATUS_PAUSED,
+        ])->save();
+    }
+
+    public function resumeCampaign(Campaign $campaign): void
+    {
+        if ($campaign->status !== Campaign::STATUS_PAUSED) {
+            return;
+        }
+
+        $campaign->forceFill([
+            'status' => Campaign::STATUS_QUEUED,
+        ])->save();
+
+        $settings = $this->resolveSettings($campaign);
+        $this->dispatchNextPendingMessage($campaign, $settings);
+    }
+
     public function randomDelaySeconds(array $settings): int
     {
         $minDelay = max(0, (int) ($settings['min_delay'] ?? self::DEFAULT_SETTINGS['min_delay']));
