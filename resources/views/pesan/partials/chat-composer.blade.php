@@ -2,7 +2,7 @@
     $textareaId = $textareaId ?? 'pesan';
     $textareaName = $textareaName ?? 'pesan';
     $textareaValue = $textareaValue ?? old($textareaName);
-    $textareaRows = $textareaRows ?? 6;
+    $textareaRows = $textareaRows ?? 8;
     $textareaLabel = $textareaLabel ?? 'Pesan';
     $textareaPlaceholder = $textareaPlaceholder ?? 'Ketik pesan Anda di sini...';
     $textareaErrorKey = $textareaErrorKey ?? $textareaName;
@@ -27,6 +27,7 @@
         name="{{ $textareaName }}"
         rows="{{ $textareaRows }}"
         placeholder="{{ $textareaPlaceholder }}"
+        style="height: auto; min-height: 120px;"
     >{{ $textareaValue }}</textarea>
     @if($errors->has($textareaErrorKey))
         <div class="invalid-feedback d-block">{{ $errors->first($textareaErrorKey) }}</div>
