@@ -17,7 +17,21 @@
             </div>
         </div>
 
-        <div class="card">
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible show fade">
+                <div class="alert-body">
+                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
+        <div class="card bulking-builder-card" style="position: relative;">
+            @include('pesan.partials.active-campaign-overlay')
             <div class="card-header">
                 <h4>Bulking Messages</h4>
             </div>

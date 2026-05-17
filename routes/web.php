@@ -19,6 +19,7 @@ Route::get('/dashboard/refresh-qr', [DashboardController::class, 'refreshQr'])->
 //pesan tunggal route
 Route::get('/pesan-tunggal', [PesanTunggalController::class, 'index'])->name("pesan-tunggal.index");
 Route::post('/pesan-tunggal', [PesanTunggalController::class, 'store'])->name("pesan-tunggal.store");
+Route::get('/pesan-tunggal/log', [PesanTunggalController::class, 'log'])->name("pesan-tunggal.log");
 Route::get('/pesan-tunggal/check-number', [PesanTunggalController::class, 'checkNumber'])->name("pesan-tunggal.check");
 
 //bulking route

@@ -166,7 +166,8 @@
             </div>
         @endif
 
-        <div class="card">
+        <div class="card" style="position: relative;">
+            @include('pesan.partials.active-campaign-overlay')
             <div class="card-header">
                 <h4>Kirim Pesan Tunggal</h4>
             </div>

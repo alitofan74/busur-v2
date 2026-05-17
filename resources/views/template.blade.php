@@ -136,6 +136,17 @@
         /* Optional: hide sidebar toggle on mobile to clean up header */
         /* .nav-link.collapse-btn { display: none; } */
     }
+
+    /* Disabled sidebar menu styles when campaign is active */
+    .disabled-sidebar-menu {
+        opacity: 0.65;
+    }
+    .disabled-sidebar-menu a {
+        cursor: not-allowed !important;
+    }
+    .disabled-sidebar-menu a span {
+        color: #98a6ad !important;
+    }
   </style>
   @yield('css')
 </head>
@@ -189,29 +200,35 @@
             </a>
           </div>
           <ul class="sidebar-menu">
-            <li class="menu-header">Main</li>
+            @php
+              $activeCampaign = \App\Models\Campaign::whereIn('status', ['queued', 'running', 'resting'])->first();
+            @endphp
             <li class="dropdown {{ Route::is('dashboard') || Route::is('dashboard.*') ? 'active' : '' }}">
               <a href="{{route("dashboard")}}" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
-            <li class="dropdown {{ Route::is('pesan-tunggal') || Route::is('pesan-tunggal.*') ? 'active' : '' }}">
-              <a href="{{route("pesan-tunggal.index")}}" class="nav-link"><i data-feather="dollar-sign"></i><span>Pesan Tunggal</span></a>
+            <li class="dropdown {{ Route::is('pesan-tunggal.index') ? 'active' : '' }} {{ $activeCampaign ? 'disabled-sidebar-menu' : '' }}">
+              @if($activeCampaign)
+                <a href="javascript:void(0)" class="nav-link" title="Terkunci: Campaign '{{ $activeCampaign->nama }}' sedang berjalan">
+                  <i data-feather="lock" class="text-warning"></i><span>Pesan Tunggal</span>
+                </a>
+              @else
+                <a href="{{route("pesan-tunggal.index")}}" class="nav-link"><i data-feather="dollar-sign"></i><span>Pesan Tunggal</span></a>
+              @endif
             </li>
-            <li class="dropdown {{ Route::is('bulking') || Route::is('bulking.*') ? 'active' : '' }}">
-              <a href="{{route("bulking.index")}}" class="nav-link"><i data-feather="calendar"></i><span>Pesan Bulking</span></a>
+            <li class="dropdown {{ Route::is('bulking.index') || Route::is('bulking.show') ? 'active' : '' }} {{ $activeCampaign ? 'disabled-sidebar-menu' : '' }}">
+              @if($activeCampaign)
+                <a href="javascript:void(0)" class="nav-link" title="Terkunci: Campaign '{{ $activeCampaign->nama }}' sedang berjalan">
+                  <i data-feather="lock" class="text-warning"></i><span>Pesan Bulking</span>
+                </a>
+              @else
+                <a href="{{route("bulking.index")}}" class="nav-link"><i data-feather="calendar"></i><span>Pesan Bulking</span></a>
+              @endif
             </li>
-            <li class="menu-header">Master</li>
-            <li class="dropdown {{ Route::is('member') || Route::is('member.*') ? 'active' : '' }}">
-              <a href="#" class="nav-link"><i data-feather="users"></i><span>Anggota</span></a>
+            <li class="dropdown {{ Route::is('bulking.log') ? 'active' : '' }}">
+              <a href="{{route("bulking.log")}}" class="nav-link"><i data-feather="file-text"></i><span>Log Pesan Bulking</span></a>
             </li>
-            <li class="dropdown {{ Route::is('inventaris') || Route::is('inventaris.*') ? 'active' : '' }}">
-              <a href="#" class="nav-link"><i data-feather="archive"></i><span>Inventaris</span></a>
-            </li>
-            <li class="menu-header">Laporan</li>
-            <li class="dropdown {{ Route::is('laporan-cashflow') || Route::is('laporan-cashflow.*') ? 'active' : '' }}">
-              <a href="#" class="nav-link"><i data-feather="trending-up"></i><span>Cash Flow</span></a>
-            </li>
-            <li class="dropdown {{ Route::is('laporan-inventaris') || Route::is('laporan-inventaris.*') ? 'active' : '' }}">
-              <a href="#" class="nav-link"><i data-feather="package"></i><span>Inventaris</span></a>
+            <li class="dropdown {{ Route::is('pesan-tunggal.log') ? 'active' : '' }}">
+              <a href="{{route("pesan-tunggal.log")}}" class="nav-link"><i data-feather="list"></i><span>Log Pesan Tunggal</span></a>
             </li>
           </ul>
         </aside>

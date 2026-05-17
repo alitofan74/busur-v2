@@ -26,6 +26,12 @@ class PesanTunggalController extends Controller
     public function store(SendPesanTunggalRequest $request)
     {
         try {
+            // Cegah pengiriman jika ada campaign bulking yang sedang berjalan
+            $activeCampaign = \App\Models\Campaign::whereIn('status', ['queued', 'running', 'resting'])->first();
+            if ($activeCampaign) {
+                throw new \Exception('Sistem tidak dapat mengirim pesan tunggal karena saat ini sedang memproses campaign bulking "' . $activeCampaign->nama . '".');
+            }
+
             $mediaPath = null;
             
             // Jika ada file, simpan ke storage lokal dulu agar bisa dibaca oleh Job
@@ -102,5 +108,14 @@ class PesanTunggalController extends Controller
             'status' => 'Terputus',
             'number' => 'N/A'
         ];
+    }
+
+    public function log()
+    {
+        $pesans = Pesan::whereNull('campaign_id')
+            ->latest()
+            ->get();
+
+        return view('pesan.tunggal-log', compact('pesans'));
     }
 }
