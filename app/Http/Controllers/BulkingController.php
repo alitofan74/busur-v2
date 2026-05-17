@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBulkingCampaignRequest;
+use App\Models\Campaign;
+use App\Services\Bulking\BulkingCampaignExecutor;
+use App\Services\Bulking\BulkingCampaignSubmissionService;
+use App\Services\Bulking\Exceptions\BulkingTargetParserException;
 use App\Services\WhatsappService;
 use Illuminate\Http\Request;
+use Throwable;
 
 class BulkingController extends Controller
 {
@@ -138,5 +144,19 @@ class BulkingController extends Controller
             'status' => 'Terputus',
             'number' => 'N/A'
         ];
+    }
+
+    protected function handleStoreFailure(Request $request, string $message, int $statusCode)
+    {
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => $message,
+            ], $statusCode);
+        }
+
+        return back()
+            ->withErrors(['error' => $message])
+            ->withInput();
     }
 }

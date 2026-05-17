@@ -26,5 +26,7 @@ Route::get('/pesan-tunggal/check-number', [PesanTunggalController::class, 'check
 Route::get('/bulking', [BulkingController::class, 'index'])->name("bulking.index");
 Route::post('/bulking', [BulkingController::class, 'store'])->name("bulking.store");
 Route::get('/bulking/log', [BulkingController::class, 'log'])->name("bulking.log");
-Route::get('/bulking/{id}', [BulkingController::class, 'show'])->name("bulking.show");
 Route::get('/bulking/check-number', [BulkingController::class, 'checkNumber'])->name("bulking.check");
+Route::get('/bulking/{campaign}', [BulkingController::class, 'show'])->name("bulking.show");
+Route::post('/bulking/{campaign}/pause', [BulkingController::class, 'pause'])->name("bulking.pause");
+Route::post('/bulking/{campaign}/resume', [BulkingController::class, 'resume'])->name("bulking.resume");

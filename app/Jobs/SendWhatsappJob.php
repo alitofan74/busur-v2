@@ -3,13 +3,12 @@
 namespace App\Jobs;
 
 use App\Models\Pesan;
-use App\Services\WhatsappService;
+use App\Services\WhatsappMessageSender;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
 
 class SendWhatsappJob implements ShouldQueue
 {
@@ -30,37 +29,23 @@ class SendWhatsappJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param WhatsappService $whatsapp
+     * @param WhatsappMessageSender $messageSender
      * @return void
      */
-    public function handle(WhatsappService $whatsapp)
+    public function handle(WhatsappMessageSender $messageSender)
     {
         try {
             // Update status ke processing
-            $this->pesan->update(['status' => 'processing']);
+            $this->pesan->update(['status' => Pesan::STATUS_PROCESSING]);
 
-            if ($this->pesan->media_path) {
-                $filePath = Storage::path($this->pesan->media_path);
-                
-                if (file_exists($filePath)) {
-                    $whatsapp->sendMedia(
-                        $this->pesan->nomor,
-                        $filePath,
-                        $this->pesan->pesan
-                    );
-                } else {
-                    throw new \Exception("File media tidak ditemukan di: " . $filePath);
-                }
-            } else {
-                $whatsapp->sendMessage($this->pesan->nomor, $this->pesan->pesan);
-            }
+            $messageSender->send($this->pesan);
 
             // Sukses
-            $this->pesan->update(['status' => 'sent']);
+            $this->pesan->update(['status' => Pesan::STATUS_SENT]);
         } catch (\Exception $e) {
             // Gagal
             $this->pesan->update([
-                'status' => 'failed',
+                'status' => Pesan::STATUS_FAILED,
                 'error_message' => $e->getMessage()
             ]);
             
