@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{asset("otika-assets/css/components.css")}}">
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="{{asset("otika-assets/css/custom.css")}}">
-  <link rel='shortcut icon' type='image/x-icon' href='{{asset("otika-assets/img/ssdg mlg bolong.png")}}' />
+  <link rel='shortcut icon' type='image/x-icon' href='{{asset("imgs/busur-logo.png")}}' />
   <style>
     .actions-cell {
     position: relative;
@@ -171,7 +171,7 @@
             </a>
           </div>
         </div>
-        <ul class="navbar-nav navbar-right">
+        {{-- <ul class="navbar-nav navbar-right">
           <li class="dropdown"><a href="#" data-toggle="dropdown"
               class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="{{asset("otika-assets/img/users/images.jpeg")}}"
                 class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
@@ -190,13 +190,13 @@
               </form>
             </div>
           </li>
-        </ul>
+        </ul> --}}
       </nav>
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="#"> <img alt="image" src="{{asset("otika-assets/img/ssdg mlg bolong.png")}}" class="header-logo" /> <span
-                class="logo-name">SSDG MLG</span>
+            <a href="#"> <img alt="image" src="{{asset("imgs/busur-logo.png")}}" class="header-logo" /> <span
+                class="logo-name">BUSUR</span>
             </a>
           </div>
           <ul class="sidebar-menu">
